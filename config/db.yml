@@ -1,5 +1,3 @@
 adapter:  postgresql
 host:     localhost
 database: gameday
-username: postgres
-password: postgres
