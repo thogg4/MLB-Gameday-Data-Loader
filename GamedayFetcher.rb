@@ -88,7 +88,7 @@ class GamedayFetcher
         @dl_queue << game_url + 'players.xml'
 
         # Get subdirectory listings (pbp only exists for a couple older years)
-        ['pitchers/','batters/','inning/','pbp/'].each do |dir|
+        ['pitchers/','batters/','inning/'].each do |dir|
           get_links_on_page(game_url + dir).select{|f| f.end_with? 'xml' }.each do |xml_filename|
             @dl_queue << game_url + dir + xml_filename
           end
@@ -142,10 +142,12 @@ class GamedayFetcher
 
     puts "\nZipping..."
     day_folder = DEST_FOLDER + day_url
-    day_name = day_folder.split('/')[-1]
-    zf = ZipFileGenerator.new(day_folder, "#{day_folder}../#{day_name}.zip")
-    zf.write()
-    FileUtils.rm_rf(day_folder)
+    if File.exists?(day_folder)
+      day_name = day_folder.split('/')[-1]
+      zf = ZipFileGenerator.new(day_folder, "#{day_folder}../#{day_name}.zip")
+      zf.write()
+      FileUtils.rm_rf(day_folder)
+    end
 
     puts ''
     puts "Done with #{@errors.length} errors"

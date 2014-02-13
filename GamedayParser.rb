@@ -78,7 +78,7 @@ class GamedayParser
     atbat_xml_nodes = xml.xpath('//atbat')
     for atbat_xml_node in atbat_xml_nodes
       atbat_attributes = xml_attributes_to_model_attributes(atbat_xml_node, AtBat)
-      atbat = AtBat.find_or_initialize_by_game_id_and_num(game.id, atbat_attributes['num'])
+      atbat = AtBat.find_or_initialize_by(game_id: game.id, num: atbat_attributes['num'])
       atbat.update_attributes(atbat_attributes)
 
       pitch_xml_nodes = atbat_xml_node.xpath('.//pitch')
@@ -99,7 +99,7 @@ class GamedayParser
     game_xml_node = xml.xpath('//game').first
     game_xml_node['mlbam_id'] = game_xml_node.remove_attribute('id').value
     game_attributes = xml_attributes_to_model_attributes(game_xml_node, Game)
-    game = Game.find_or_initialize_by_mlbam_id(game_xml_node['mlbam_id'])
+    game = Game.find_or_initialize_by(mlbam_id: game_xml_node['mlbam_id'])
     game.update_attributes(game_attributes)
     return game
   end
